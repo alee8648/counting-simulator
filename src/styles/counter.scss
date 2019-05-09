@@ -1,0 +1,71 @@
+.counter__wrapper {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.counter {
+
+
+}
+
+#count-value {
+	$dimension: 150px;
+	$tomato: rgba(255, 99, 71, 1);
+	font-size: 42px;
+	color: $tomato;
+	height: $dimension;
+	line-height: $dimension;
+	width: $dimension;
+	border-radius: 50%;
+	border: solid 3px $tomato;
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: 0;
+	transition: all 0.2s ease-in, box-shadow 0.05s ease-in;
+	cursor: pointer;
+
+	&:focus {
+		outline: none;
+		box-shadow: 0 0 3px rgba(255, 99, 71, 0.3);
+	}
+
+
+	&:active {
+		box-shadow: 0 0 20px rgba(255, 99, 71, 0.6);
+	}
+
+
+	@for $i from 1 through 1000 {
+	    $dimension: 150px + ($i * 10px);
+
+	    &.counter-size--#{$i} {
+	        width: $dimension;
+	        height: $dimension;
+	        line-height: $dimension;
+
+	        @if $i > 9 {
+	        	$hundreds: floor($i / 10);
+	        	$alpha: $hundreds / 10;
+	        	font-size: #{42 + ($hundreds * 4) }px;
+	        	background-color: rgba(255, 99, 71, $alpha);
+	        }
+
+	        @if $i > 89 {
+	        	color: white;
+	        }
+	    }
+	}
+}
+
+
+.counter__button {
+	
+}
+
+.counter__button-wrapper {
+	position: absolute;
+	right: 150px;
+}

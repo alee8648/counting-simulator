@@ -1,0 +1,24 @@
+.shop__wrapper {
+	position: fixed;
+	height: 25vh;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 15px;
+}
+
+.shop__inventory {
+	display: flex;
+}
+
+.shop-item__wrapper {
+	flex-basis: 25%;
+	flex-grow: 0;
+	padding: 3px;
+}
+
+.shop-item {
+	border: solid 1px tomato;
+	padding: 3px;
+	text-align: center;
+}

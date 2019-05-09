@@ -1,0 +1,133 @@
+import React, { Component } from 'react';
+import Counter from './Counter.jsx';
+import Shop from './Shop.jsx';
+
+const config = {
+
+};
+
+class App extends Component {
+	state = {
+		count: 0,
+		damage: 1,
+		speed: 5,
+		time: 0
+	};
+
+
+	constructor() {
+		console.log('---- constructor running - App');
+		super(...arguments);
+		this.startTimer();
+	}
+
+	startTimer() {
+		setTimeout(() => {
+			this.increaseTime();
+			this.startTimer();
+			this.handleTimeIncrease();
+		}, 1000);
+	}
+
+	increaseTime() {
+		this.setState({
+			time: ++this.state.time
+		});
+		console.log(this.state.time);
+	}
+
+	handleTimeIncrease() {
+		// Every {speed}, deal {damage}
+		if (this.state.time % this.state.speed === 0) {
+			this.handleIncreaseCount();
+		}
+	}
+
+	canAfford( cost ) {
+		console.log(`Can you afford ${cost}? ${cost < this.state.count}`);
+		if ( cost <= this.state.count ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	handleSpendCount( cost, callback ) {
+		if ( this.canAfford( cost ) ) {
+			console.log('You can afford it, performing callback');
+			this.setState({
+				count: this.state.count - cost
+			});
+			callback();
+		}
+	}
+
+	getDamageCost() {
+		return this.state.damage * 10;
+	}
+
+	getSpeedCost() {
+		if (this.state.speed === 1) {
+			return 0;
+		}
+		return 10 + (Math.pow(6 - this.state.speed, 2) * 10);
+	}
+
+	render() {
+		console.log('---- render running - App');
+
+		return (
+			<div>
+				<Counter 
+					count={this.state.count}
+					onIncreaseCount={this.handleIncreaseCount}
+				/>
+				<Shop 
+					onBuyIncreaseSpeed={this.handleBuyIncreaseSpeed}
+					onBuyIncreaseDamage={this.handleBuyIncreaseDamage}
+					onSpendCount={this.handleSpendCount}
+					damageCost={this.getDamageCost()}
+					speedCost={this.getSpeedCost()}
+				/>
+			</div>
+		);
+	}
+
+	// Handles requests to increase the count in the state
+	handleIncreaseCount = () => {
+		console.log("Request to increase count")
+		this.setState({
+			count: this.state.count + this.state.damage
+		})
+	}
+
+	// Handles requests to increase the speed in the state
+	handleIncreaseSpeed = () => {
+		console.log("Request to increase speed")
+		if ( this.state.speed > 1 ) {
+			this.setState({
+				speed: --this.state.speed
+			})
+		}
+	}
+
+	// Handles requests to increase the damage in the state
+	handleIncreaseDamage = () => {
+		console.log("Request to increase damage")
+		this.setState({
+			damage: ++this.state.damage
+		})
+	}
+
+	handleBuyIncreaseDamage = (cost) => {
+		console.log(`Request to increase DAMAGE for ${cost}`);
+		this.handleSpendCount( cost, () => this.handleIncreaseDamage());
+	}
+
+	handleBuyIncreaseSpeed = (cost) => {
+		console.log(`Request to increase SPEED for ${cost}`);
+		this.handleSpendCount( cost, () => this.handleIncreaseSpeed());
+	}
+}
+
+export default App;
