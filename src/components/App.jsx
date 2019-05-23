@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 
+import Item from '../classes/Item.js';
+
 import Counter from './Counter.jsx';
 import Shop from './Shop.jsx';
 import Stash from './Stash.jsx';
@@ -16,24 +18,21 @@ class App extends Component {
 		damage: 1,
 		speed: 3,
 		time: 0,
-		equippedItems: [{
+		equippedItems: [ new Item({
 			id: 0,
-			name: "Sharp stick",
 			damage: 1,
 			speed: 3
-		}],
-		itemsInStash: [{
+		})],
+		itemsInStash: [ new Item({
 			id: 1,
-			name: "Shiny butter knife",
 			damage: 2,
 			speed: 3
-		},
-		{
+		}),
+		new Item({
 			id: 2,
-			name: "Basic rod",
 			damage: 1,
 			speed: 2
-		}]
+		})]
 	};
 
 
@@ -41,6 +40,8 @@ class App extends Component {
 		console.log('---- constructor running - App');
 		super(...arguments);
 		this.startTimer();
+
+		this.newItem = new Item({});
 	}
 
 	startTimer() {
