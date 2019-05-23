@@ -29,6 +29,8 @@ class StashItem extends Component {
 			<div className="shop-item__wrapper">
 				<div className="shop-item">
 					<h3 className="shop-item__heading">{this.getStashItemName()}</h3>
+					<p>Damage: {this.props.damage}<br />
+					Speed: {this.props.speed}</p>
 					<button className="shop-item__buy" onClick={() => this.props.equipItem(this.props.id)} disabled={!this.isEnabled()}>{this.getButtonText()}</button>
 				</div>
 			</div>

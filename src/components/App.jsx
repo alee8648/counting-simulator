@@ -14,7 +14,7 @@ class App extends Component {
 	state = {
 		count: 0,
 		damage: 1,
-		speed: 5,
+		speed: 3,
 		time: 0,
 		equippedItems: [{
 			id: 0,
@@ -170,6 +170,16 @@ class App extends Component {
 		this.setState({
 			equippedItems: equipItem
 		});
+
+		this.updateStats( equipItem[0] );
+	}
+
+	updateStats( newItem ) {
+		console.log( `******Updating damage to ${newItem.damage}`, newItem);
+		this.setState({
+			damage: newItem.damage,
+			speed: newItem.speed
+		})
 	}
 }
 
