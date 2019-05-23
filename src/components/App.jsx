@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
+
 import Counter from './Counter.jsx';
 import Shop from './Shop.jsx';
+import Stash from './Stash.jsx';
+import Equipment from './Equipment.jsx';
 
 const config = {
 
@@ -11,7 +15,25 @@ class App extends Component {
 		count: 0,
 		damage: 1,
 		speed: 5,
-		time: 0
+		time: 0,
+		equippedItems: [{
+			id: 0,
+			name: "Sharp stick",
+			damage: 1,
+			speed: 3
+		}],
+		itemsInStash: [{
+			id: 1,
+			name: "Shiny butter knife",
+			damage: 2,
+			speed: 3
+		},
+		{
+			id: 2,
+			name: "Basic rod",
+			damage: 1,
+			speed: 2
+		}]
 	};
 
 
@@ -82,7 +104,12 @@ class App extends Component {
 					count={this.state.count}
 					onIncreaseCount={this.handleIncreaseCount}
 				/>
-				<Shop 
+				<Equipment
+					equippedItems={this.state.equippedItems}
+				/>
+				<Stash 
+					itemsInStash={this.state.itemsInStash}
+					equipItem={this.handleEquipItem}
 					onBuyIncreaseSpeed={this.handleBuyIncreaseSpeed}
 					onBuyIncreaseDamage={this.handleBuyIncreaseDamage}
 					onSpendCount={this.handleSpendCount}
@@ -127,6 +154,22 @@ class App extends Component {
 	handleBuyIncreaseSpeed = (cost) => {
 		console.log(`Request to increase SPEED for ${cost}`);
 		this.handleSpendCount( cost, () => this.handleIncreaseSpeed());
+	}
+
+	handleEquipItem = (id) => {
+		console.log(`Request to equip item with id ${id}`);
+		let newStash = this.state.itemsInStash;
+		this.state.equippedItems.forEach( item => {
+			newStash.push( item );
+		})
+		let itemIndex = _.findIndex( newStash, item => item.id === id);
+		let equipItem = newStash.splice( itemIndex, 1 ); // remove the item to equip
+		this.setState({
+			itemsInStash: newStash
+		});
+		this.setState({
+			equippedItems: equipItem
+		});
 	}
 }
 
