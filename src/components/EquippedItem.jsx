@@ -7,7 +7,7 @@ class EquippedItem extends Component {
 	}
 
 	render() {
-		console.log('---- render running - EquippedItem');
+		// console.log('---- render running - EquippedItem');
 
 		return (
 			<div className="equipment-item">

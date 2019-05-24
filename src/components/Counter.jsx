@@ -17,7 +17,7 @@ class Counter extends Component {
 	}
 
 	render() {
-		console.log('---- render running - Counter', this.props);
+		// console.log('---- render running - Counter', this.props);
 
 		return (
 			<div className="counter__wrapper">

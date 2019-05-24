@@ -8,7 +8,7 @@ class Equipment extends Component {
 	}
 
 	render() {
-		console.log('---- render running - Equipment');
+		// console.log('---- render running - Equipment');
 		let equippedItems = [];
 
 		this.props.equippedItems.forEach( (item, index) => {

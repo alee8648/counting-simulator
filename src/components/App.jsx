@@ -37,11 +37,10 @@ class App extends Component {
 
 
 	constructor() {
-		console.log('---- constructor running - App');
+		// console.log('---- constructor running - App');
 		super(...arguments);
 		this.startTimer();
 
-		this.newItem = new Item({});
 	}
 
 	startTimer() {
@@ -56,7 +55,7 @@ class App extends Component {
 		this.setState({
 			time: ++this.state.time
 		});
-		console.log(this.state.time);
+		// console.log(this.state.time);
 	}
 
 	handleTimeIncrease() {
@@ -67,7 +66,7 @@ class App extends Component {
 	}
 
 	canAfford( cost ) {
-		console.log(`Can you afford ${cost}? ${cost < this.state.count}`);
+		// console.log(`Can you afford ${cost}? ${cost < this.state.count}`);
 		if ( cost <= this.state.count ) {
 			return true;
 		} else {
@@ -77,7 +76,7 @@ class App extends Component {
 
 	handleSpendCount( cost, callback ) {
 		if ( this.canAfford( cost ) ) {
-			console.log('You can afford it, performing callback');
+			// console.log('You can afford it, performing callback');
 			this.setState({
 				count: this.state.count - cost
 			});
@@ -97,7 +96,7 @@ class App extends Component {
 	}
 
 	render() {
-		console.log('---- render running - App');
+		// console.log('---- render running - App');
 
 		return (
 			<div>
@@ -123,7 +122,7 @@ class App extends Component {
 
 	// Handles requests to increase the count in the state
 	handleIncreaseCount = () => {
-		console.log("Request to increase count")
+		// console.log("Request to increase count")
 		this.setState({
 			count: this.state.count + this.state.damage
 		})
@@ -131,7 +130,7 @@ class App extends Component {
 
 	// Handles requests to increase the speed in the state
 	handleIncreaseSpeed = () => {
-		console.log("Request to increase speed")
+		// console.log("Request to increase speed")
 		if ( this.state.speed > 1 ) {
 			this.setState({
 				speed: --this.state.speed
@@ -141,46 +140,104 @@ class App extends Component {
 
 	// Handles requests to increase the damage in the state
 	handleIncreaseDamage = () => {
-		console.log("Request to increase damage")
+		// console.log("Request to increase damage")
 		this.setState({
 			damage: ++this.state.damage
 		})
 	}
 
 	handleBuyIncreaseDamage = (cost) => {
-		console.log(`Request to increase DAMAGE for ${cost}`);
+		// console.log(`Request to increase DAMAGE for ${cost}`);
 		this.handleSpendCount( cost, () => this.handleIncreaseDamage());
 	}
 
 	handleBuyIncreaseSpeed = (cost) => {
-		console.log(`Request to increase SPEED for ${cost}`);
+		// console.log(`Request to increase SPEED for ${cost}`);
 		this.handleSpendCount( cost, () => this.handleIncreaseSpeed());
 	}
 
-	handleEquipItem = (id) => {
-		console.log(`Request to equip item with id ${id}`);
-		let newStash = this.state.itemsInStash;
-		this.state.equippedItems.forEach( item => {
-			newStash.push( item );
-		})
-		let itemIndex = _.findIndex( newStash, item => item.id === id);
-		let equipItem = newStash.splice( itemIndex, 1 ); // remove the item to equip
+	handleEquipItem = (itemToEquip) => {
+		const stash = this.state.itemsInStash;
+		const unequippedItems = this.unequipAllEquippedItems();
+		this.equipItem( itemToEquip );
+		let updatedStash = this.removeItemFromStash( itemToEquip, stash ).updatedStash;
+		updatedStash = this.addItemsToStash( unequippedItems, updatedStash );
+		
+
 		this.setState({
-			itemsInStash: newStash
-		});
-		this.setState({
-			equippedItems: equipItem
+			itemsInStash: updatedStash
 		});
 
-		this.updateStats( equipItem[0] );
+		this.updateStats( itemToEquip );
+
+
 	}
 
 	updateStats( newItem ) {
-		console.log( `******Updating damage to ${newItem.damage}`, newItem);
+		// console.log( `******Updating damage to ${newItem.damage}`, newItem);
 		this.setState({
 			damage: newItem.damage,
 			speed: newItem.speed
 		})
+	}
+	
+	// Unequip all items
+	unequipAllEquippedItems() {
+		let removedItems = [];
+		this.state.equippedItems.forEach( item => {
+			removedItems.push( this.unequipItem( item ) );
+		});
+
+		return removedItems;
+	}
+
+	// Remove the given item from the equipped item array and return it
+	unequipItem( item ) {
+		let newEquipment = this.state.equippedItems;
+		const itemToUnequipIndex = _.findIndex( newEquipment, equippedItem => equippedItem.id === item.id);
+		const unequippedItem = newEquipment.splice( itemToUnequipIndex, 1 ); // remove the item to equip
+
+		this.setState({
+			equippedItems: newEquipment
+		});
+
+		return unequippedItem;
+	}
+
+	// Equip item
+	equipItem( item ) {
+		let updatedEquipment = this.state.equippedItems;
+		updatedEquipment.push( item );
+		this.setState({
+			equippedItems: updatedEquipment
+		});
+	}
+
+	// Remove item from stash
+	removeItemFromStash( item, stash ) {
+		let updatedStash = stash;
+		const stashItemIndex = _.findIndex( updatedStash, stashItem => stashItem.id === item.id);
+		const removedItem = updatedStash.splice( stashItemIndex, 1 ); // remove the item to equip
+
+		return {
+			removedItem,
+			updatedStash
+		};
+	}
+
+	// Add items to stash
+	addItemsToStash( items, stash ) {
+		let updatedStash = stash;
+		updatedStash.push( ...items.reduce( function(updatedStash, item) { this.addItemToStash( item, updatedStash ) } ) );
+		return updatedStash;
+	}
+
+	// Add item to stash
+	addItemToStash( item, stash ) {
+		let updatedStash = stash;
+		updatedStash.push( item );
+
+		return updatedStash;
 	}
 }
 

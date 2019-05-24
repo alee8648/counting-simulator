@@ -7,7 +7,7 @@ class StashItem extends Component {
 	}
 
 	getStashItemName() {
-		return this.props.name;
+		return this.props.item.name;
 	}
 
 	getButtonText() {
@@ -23,15 +23,15 @@ class StashItem extends Component {
 	}
 
 	render() {
-		console.log('---- render running - StashItem', this.props);
+		// console.log('---- render running - StashItem', this.props);
 
 		return (
 			<div className="shop-item__wrapper">
 				<div className="shop-item">
 					<h3 className="shop-item__heading">{this.getStashItemName()}</h3>
-					<p>Damage: {this.props.damage}<br />
-					Speed: {this.props.speed}</p>
-					<button className="shop-item__buy" onClick={() => this.props.equipItem(this.props.id)} disabled={!this.isEnabled()}>{this.getButtonText()}</button>
+					<p>Damage: {this.props.item.damage}<br />
+					Speed: {this.props.item.speed}</p>
+					<button className="shop-item__buy" onClick={() => this.props.equipItem(this.props.item)} disabled={!this.isEnabled()}>{this.getButtonText()}</button>
 				</div>
 			</div>
 		);

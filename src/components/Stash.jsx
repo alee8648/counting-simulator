@@ -8,17 +8,14 @@ class Stash extends Component {
 	}
 
 	render() {
-		console.log('---- render running - Stash', this.props);
+		// console.log('---- render running - Stash', this.props);
 
 		let stashInventory = [];
 		this.props.itemsInStash.forEach( (item, index) => {
 			stashInventory.push(
 				<StashItem
 					key={index}
-					name={item.name}
-					damage={item.damage}
-					speed={item.speed}
-					id={item.id}
+					item={item}
 					equipItem={this.props.equipItem}
 				/>
 			)
